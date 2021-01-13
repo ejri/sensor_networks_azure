@@ -1,3 +1,8 @@
+# requirements:
+# smbus
+# mpu6050-raspberrypi
+# azure-iot-device
+
 # connecting the accelerometer GY-521 (MPU6050) to RPi
 # i2cdetect -y 1 to double check if i2c on the pi is confgirured
 # all dep. libraries are in requirements.txt
