@@ -15,9 +15,28 @@ import time
 import asyncio
 from azure.iot.device.aio import IoTHubDeviceClient
 import json
+import RPi.GPIO as GPIO
 
 i2c_address = 0x68
 mpu = mpu6050(i2c_address)
+
+# Setting pin #24 as output. Example: in
+# setting up device twin, connect an indicator LED at pin24
+GPIO.setmode(GPIO.BCM)
+LED_pin = 24
+GPIO.setup(LED_pin, GPIO.OUT)
+
+# manually testing if the LED is connected properly
+# GPIO.output(LED_pin, GPIO.HIGH)
+
+# define twin  function handle
+# this function controls LED at pin 24, through device twin
+def handle_twin(twin):
+    print("Twin received", twin)
+    if "desired" in twin:
+        desired = twin["desired"]
+        if "led" in desired:
+            GPIO.output(LED_pin, desired["led"])
 
 
 async def main():
@@ -63,6 +82,10 @@ async def main():
         json_body = json.dumps(data)
         print("Sending message: ", json_body)
         await device_client.send_message(json_body)
+
+        # get device twin status and command
+        twin = await device_client.get_twin()
+        handle_twin(twin)
 
         time.sleep(60)
 

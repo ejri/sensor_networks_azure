@@ -1,3 +1,4 @@
 smbus
 mpu6050-raspberrypi
 azure-iot-device
+RPi.GPIO
