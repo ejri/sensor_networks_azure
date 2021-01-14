@@ -52,6 +52,7 @@ async def main():
         # json file
 
         data = {}
+        data["deviceID"] = "RaspberryPi4_Tree"
         data["Acc_X"] = "{0:0.1f}".format(accel_data["x"])
         data["Acc_Y"] = "{0:0.1f}".format(accel_data["y"])
         data["Acc_Z"] = "{0:0.1f}".format(accel_data["z"])
@@ -63,7 +64,7 @@ async def main():
         print("Sending message: ", json_body)
         await device_client.send_message(json_body)
 
-        time.sleep(5)
+        time.sleep(60)
 
     await device_client.disconnect()
 
