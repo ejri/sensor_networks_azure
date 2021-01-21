@@ -1,16 +1,7 @@
 
 // This code: connecting an accelerometer to esp32. The raw accelerometer data is sent to IoT Hub.
 // IoT Hub connection, and device provisioning, etc. :
-// Azure ESP32 IoT DevKit Get Started
-// https://docs.microsoft.com/en-us/samples/azure-samples/esp32-iot-devkit-get-started/sample/
 
-/**
- * A simple Azure IoT example for sending telemetry to Iot Hub.
- 
- original code from
- https://github.com/VSChina/ESP32_AzureIoT_Arduino
- 
- */
 
 // GY-521 / mpu6050 on esp32
 // connections: 5v, GND, SDA, SCL, on sensor to 5v, GND, SDA, SCL on esp32 respectively
@@ -35,13 +26,13 @@ int16_t aX, aY, aZ, gX, gY, gZ;
 #define INTERVAL 10000 //10seconds intervals sending messages
 #define MESSAGE_MAX_LEN 256
 // Please input the SSID and password of WiFi
-const char *ssid = "Liverpool FC";
-const char *password = "6042140214";
+const char *ssid = "";
+const char *password = "";
 
 /*String containing Hostname, Device Id & Device Key in the format:                         */
 /*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>"                */
 /*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessSignature=<device_sas_token>"    */
-static const char *connectionString = "HostName=SensorDataEsp32.azure-devices.net;DeviceId=device1;SharedAccessKey=BEWCk7mo4nEkleYvRKjx9FNkVPf+eFjsoMzCOtuau18=";
+static const char *connectionString = 
 //const char *messageData = "{\"messageId\":%d, \"Temperature\":%f, \"Humidity\":%f}";
 const char *messageData = "{\"messageId\":%d, \"aX\":%d, \"aY\":%d, \"aZ\":%d, \"gX\":%d, \"gY\":%d, \"gZ\":%d}";
 static bool hasIoTHub = false;
