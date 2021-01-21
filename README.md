@@ -32,8 +32,8 @@
 Setup on RPi4 - GY-521 (MPU6050)
 \
 \
-![image output](rpi_1.png)
-![image output](rpi_2.png)
+![image output](rpi_1.jpg)
+![image output](rpi_2.jpg)
 
 
 Data uploaded to IoT Hub, passed through Stream Analytics
@@ -45,7 +45,7 @@ Data uploaded to IoT Hub, passed through Stream Analytics
 Telemetry data in Azure SQL Database
 \
 \
-![image output](Azure_SQL.jpg)
+![image output](Azure_SQL.png)
 
 Setting up Device Twin in Azure
 \
