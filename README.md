@@ -34,17 +34,17 @@
 ![image output](rpi_1.jpg)
 ![image output](rpi_2.jpg)
 \
-\
+
 ## Data uploaded to IoT Hub, passed through Stream Analytics:
 \
 ![image output](stream_analytics.png)
 \
-\
+
 ## Telemetry data in Azure SQL Database:
 \
 ![image output](Azure_SQL.png)
 \
-\
+
 ## Setting up Device Twin in Azure:
 \
 ![image output](device_twin.png)
