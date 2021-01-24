@@ -19,7 +19,7 @@
 
 
 
-# trying out code
+# Trying code out:
 1. clone repo
 2. install dependencies (where relevant)
 2. run code specific for each board 
@@ -31,25 +31,20 @@
 
 ## Setup on RPi4 - GY-521 (MPU6050):
 \
-\
 ![image output](rpi_1.jpg)
 ![image output](rpi_2.jpg)
-
-
-
+\
+\
 ## Data uploaded to IoT Hub, passed through Stream Analytics:
 \
-\
 ![image output](stream_analytics.png)
-
-
+\
+\
 ## Telemetry data in Azure SQL Database:
 \
-\
 ![image output](Azure_SQL.png)
-
-
-## Setting up Device Twin in Azure:
 \
+\
+## Setting up Device Twin in Azure:
 \
 ![image output](device_twin.png)
