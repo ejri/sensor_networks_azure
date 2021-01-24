@@ -7,7 +7,7 @@
 * [x] Phase 1- general architect: Save telemetry data in a SQL database on Azure 
 * [ ] Phase 1- general architect: connect 5G module
 * [ ] Phase 1- general architect: connect more sensors
-* [ ] Phase 1- general architect: add an architect diagram
+* [x] Phase 1- general architect: add an architect diagram
 * [ ] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
 * [x] Phase 1- general architect: GDPR, ethical/ data AI approach: fitler data on Edge device before uploading data to Azure
 
@@ -17,6 +17,10 @@
 * [ ] Phase 3- use-case 1 architect: Link this IoT system to other systems (see: custom vision in  repo)
 * [ ] Phase 3- use-case 1 architect: architect optimzations
 
+
+## General overview - Telemetry (custom vision in another repo):
+\
+![image output](rpi_azure.png)
 
 
 # Trying code out:
