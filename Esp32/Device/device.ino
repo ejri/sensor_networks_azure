@@ -3,7 +3,7 @@
 // IoT Hub connection, and device provisioning, etc. :
 
 // SimpleMQTT_esp32_azure_iothub.ino
-// downloads/ubc_5G/sensor_networks_azure/
+// downloads/ubc_5G/sensor_networks_azure/ 
 
 // Azure ESP32 IoT DevKit Get Started
 // https://docs.microsoft.com/en-us/samples/azure-samples/esp32-iot-devkit-get-started/sample/
