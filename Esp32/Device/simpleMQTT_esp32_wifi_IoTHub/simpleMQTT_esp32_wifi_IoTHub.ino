@@ -1,3 +1,4 @@
+///// WIFI
 
 // This code: connecting an accelerometer to esp32. The raw accelerometer data is sent to IoT Hub.
 // IoT Hub connection, and device provisioning, etc. :
@@ -13,14 +14,13 @@
  
  original code from:
  https://github.com/VSChina/ESP32_AzureIoT_Arduino
-
 IoT Hub has to be Standard Tier, Basic Tier creates a lot of issues
  
  */
 
 // TCA9548A I2C Switch between:
-// adafruit LSM9DS1 at address, on TCA9548's channel 0
-// GY521-MPU 6050 at address, on TCA9548's channel 1
+// 
+// 5 of GY521-MPU 6050 at address, on TCA9548's channels 3-7
 // TCA9548 module I2C address:  0x70
 //
 
@@ -45,20 +45,8 @@ int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;  // for acceleromter, temperature, gyroscop
 //Variables for Gyroscope
 
 const int MPU = 0x68;
-int16_t aX, aY, aZ, gX, gY, gZ;
+int16_t aX1, aY1, aZ1, gX1, gY1, gZ1, aX2, aY2, aZ2, gX2, gY2, gZ2,aX3, aY3, aZ3, gX3, gY3, gZ3, aX4, aY4, aZ4, gX4, gY4, gZ4, aX5, aY5, aZ5, gX5, gY5, gZ5;
 //////////////////////////// Accelerometer ////////////////////
-
-#include <Adafruit_LSM9DS1.h>
-#include <Adafruit_Sensor.h> // not used in this demo but required!
-
-//////////////////////////// LSM9DS1 ////////////////////
-Adafruit_LSM9DS1 lsm_1 = Adafruit_LSM9DS1(1);
-
-#define LSM9DS1_SCK A5
-#define LSM9DS1_MISO 12
-#define LSM9DS1_MOSI A4
-#define LSM9DS1_XGCS 6
-#define LSM9DS1_MCS 5
 
 void TCA9548A(uint8_t bus)
 {
@@ -67,30 +55,10 @@ void TCA9548A(uint8_t bus)
   Wire.endTransmission();
 }
 
-void setupSensor()
-{
-  // 1.) Set the accelerometer range
-  lsm_1.setupAccel(lsm_1.LSM9DS1_ACCELRANGE_2G);
-  //lsm_1.setupAccel(lsm_1.LSM9DS1_ACCELRANGE_4G);
-  //lsm_1.setupAccel(lsm_1.LSM9DS1_ACCELRANGE_8G);
-  //lsm_1.setupAccel(lsm_1.LSM9DS1_ACCELRANGE_16G);
-
-  // 2.) Set the magnetometer sensitivity
-  lsm_1.setupMag(lsm_1.LSM9DS1_MAGGAIN_4GAUSS);
-  //lsm_1.setupMag(lsm_1.LSM9DS1_MAGGAIN_8GAUSS);
-  //lsm_1.setupMag(lsm_1.LSM9DS1_MAGGAIN_12GAUSS);
-  //lsm_1.setupMag(lsm_1.LSM9DS1_MAGGAIN_16GAUSS);
-
-  // 3.) Setup the gyroscope
-  lsm_1.setupGyro(lsm_1.LSM9DS1_GYROSCALE_245DPS);
-  //lsm_1.setupGyro(lsm_1.LSM9DS1_GYROSCALE_500DPS);
-  //lsm_1.setupGyro(lsm_1.LSM9DS1_GYROSCALE_2000DPS)a
-}
-
 //=============================================================================
 
 #define INTERVAL 15000 //10seconds intervals sending messages
-#define MESSAGE_MAX_LEN 256
+#define MESSAGE_MAX_LEN 500
 // Please input the SSID and password of WiFi
 const char *ssid = "";
 const char *password = "";
@@ -102,7 +70,7 @@ const char *password = "";
 static const char *connectionString = "";
 //const char *messageData = "{\"messageId\":%d, \"Temperature\":%f, \"Humidity\":%f}";
 const char *DeviceID = "GreenSpaceTree1";
-const char *messageData = "{\"DeviceID\":\"GreenSpaceTree1\" ,\"messageId\":%d, \"aX\":%d, \"aY\":%d, \"aZ\":%d, \"gX\":%d, \"gY\":%d, \"gZ\":%d}";
+const char *messageData = "{\"DeviceID\":\"GreenSpaceTree1\",\"TreeType\":\"Cedar\" ,\"messageId\":%d, \"aX1\":%d, \"aY1\":%d, \"aZ1\":%d, \"gX1\":%d, \"gY1\":%d, \"gZ1\":%d, \"aX2\":%d, \"aY2\":%d, \"aZ2\":%d, \"gX2\":%d, \"gY2\":%d, \"gZ2\":%d, \"aX3\":%d, \"aY3\":%d, \"aZ3\":%d, \"gX3\":%d, \"gY3\":%d, \"gZ3\":%d, \"aX4\":%d, \"aY4\":%d, \"aZ4\":%d, \"gX4\":%d, \"gY4\":%d, \"gZ4\":%d, \"aX5\":%d, \"aY5\":%d, \"aZ5\":%d, \"gX5\":%d, \"gY5\":%d, \"gZ5\":%d}";
 static bool hasIoTHub = false;
 static bool hasWifi = false;
 int messageCount = 1;
@@ -206,30 +174,42 @@ void setup()
 
   Wire.begin();
 
-  /* Initialise the 1st sensor */
-  Serial.println("LSM9DS1 data read demo");
-
-  // lsm9ds1 i2c at the multiplexer channel 1. check if sensor is connected
-  TCA9548A(0);
-  if (!lsm_1.begin())
-  {
-    Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
-    while (1)
-      ;
-  }
-  Serial.println("Found LSM9DS1 9DOF");
-
-  // sensor connected. initiate sensor
-  TCA9548A(0);
-  setupSensor();
-
   // mpu6050 i2c at the multiplexer channel 1.
-  TCA9548A(1);
+  TCA9548A(3);
   Wire.beginTransmission(MPU);
   Wire.write(0x6B);
   Wire.write(0);
   Wire.endTransmission(true);
   delay(10);
+
+  TCA9548A(4);
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+  delay(10);
+
+  TCA9548A(5);
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+  delay(10);
+
+  TCA9548A(6);
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+  delay(10);
+
+  TCA9548A(7);
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+  delay(10);
+
 
   //// start count///
   send_interval_ms = millis();
@@ -243,94 +223,128 @@ void loop()
         (int)(millis() - send_interval_ms) >= INTERVAL)
     {
 
-      TCA9548A(0);
-      lsm_1.read(); /* ask it to read in the data */
-
-      /* Get a new sensor event */
-      TCA9548A(0);
-      sensors_event_t a, m, g, temp;
-      TCA9548A(0);
-      lsm_1.getEvent(&a, &m, &g, &temp);
-
-      Serial.print("Accel X: ");
-      Serial.print(a.acceleration.x);
-      Serial.print(" m/s^2");
-      Serial.print("\tY: ");
-      Serial.print(a.acceleration.y);
-      Serial.print(" m/s^2 ");
-      Serial.print("\tZ: ");
-      Serial.print(a.acceleration.z);
-      Serial.println(" m/s^2 ");
-
-      Serial.print("Mag X: ");
-      Serial.print(m.magnetic.x);
-      Serial.print(" uT");
-      Serial.print("\tY: ");
-      Serial.print(m.magnetic.y);
-      Serial.print(" uT");
-      Serial.print("\tZ: ");
-      Serial.print(m.magnetic.z);
-      Serial.println(" uT");
-
-      Serial.print("Gyro X: ");
-      Serial.print(g.gyro.x);
-      Serial.print(" rad/s");
-      Serial.print("\tY: ");
-      Serial.print(g.gyro.y);
-      Serial.print(" rad/s");
-      Serial.print("\tZ: ");
-      Serial.print(g.gyro.z);
-      Serial.println(" rad/s");
-
-      Serial.println();
-      delay(10);
+      
 
       // get raw accelerometer data /////
-      TCA9548A(1);
+      TCA9548A(3);
       Wire.beginTransmission(MPU);
       Wire.write(0x3B);
       Wire.endTransmission(false);
       Wire.requestFrom(MPU, 12, true);
-      aX = Wire.read() << 8 | Wire.read();
-      aY = Wire.read() << 8 | Wire.read();
-      aZ = Wire.read() << 8 | Wire.read();
-      gX = Wire.read() << 8 | Wire.read();
-      gY = Wire.read() << 8 | Wire.read();
-      gZ = Wire.read() << 8 | Wire.read();
+      aX1 = Wire.read() << 8 | Wire.read();
+      aY1 = Wire.read() << 8 | Wire.read();
+      aZ1 = Wire.read() << 8 | Wire.read();
+      gX1 = Wire.read() << 8 | Wire.read();
+      gY1 = Wire.read() << 8 | Wire.read();
+      gZ1 = Wire.read() << 8 | Wire.read();
 
-      // simulated acceleromter data
-      /*
-    aX=(float)random(0, 500) / 10;    
-    aY=(float)random(0, 500) / 10;  
-    aZ=(float)random(0, 500) / 10;  
-    gX=(float)random(0, 500) / 10;  
-    gY=(float)random(0, 500) / 10;  
-    gZ=(float)random(0, 500) / 10;
-    */
+   // Serial print acceleromter data
+    Serial.print("MPU 1:");Serial.print(aX1);
+    Serial.print(","); Serial.print(aY1);
+    Serial.print(","); Serial.print(aZ1); 
+    Serial.print(","); Serial.print(gX1);
+    Serial.print(","); Serial.print(gY1);
+    Serial.print(","); Serial.println(gZ1);
+    
+    delay(1000);
 
-      // Serial print acceleromter data
-      Serial.print(aX);
-      Serial.print(",");
-      Serial.print(aY);
-      Serial.print(",");
-      Serial.print(aZ);
-      Serial.print(",");
-      Serial.print(gX);
-      Serial.print(",");
-      Serial.print(gY);
-      Serial.print(",");
-      Serial.println(gZ);
+    // get raw accelerometer data /////
+      TCA9548A(4);
+      Wire.beginTransmission(MPU);
+      Wire.write(0x3B);
+      Wire.endTransmission(false);
+      Wire.requestFrom(MPU, 12, true);
+      aX2 = Wire.read() << 8 | Wire.read();
+      aY2 = Wire.read() << 8 | Wire.read();
+      aZ2 = Wire.read() << 8 | Wire.read();
+      gX2 = Wire.read() << 8 | Wire.read();
+      gY2 = Wire.read() << 8 | Wire.read();
+      gZ2 = Wire.read() << 8 | Wire.read();
 
-      delay(2000);
+   // Serial print acceleromter data
+    Serial.print("MPU 2:");Serial.print(aX2);
+    Serial.print(","); Serial.print(aY2);
+    Serial.print(","); Serial.print(aZ2); 
+    Serial.print(","); Serial.print(gX2);
+    Serial.print(","); Serial.print(gY2);
+    Serial.print(","); Serial.println(gZ2);
+    
+    delay(1000);
+
+    // get raw accelerometer data /////
+      TCA9548A(5);
+      Wire.beginTransmission(MPU);
+      Wire.write(0x3B);
+      Wire.endTransmission(false);
+      Wire.requestFrom(MPU, 12, true);
+      aX3 = Wire.read() << 8 | Wire.read();
+      aY3 = Wire.read() << 8 | Wire.read();
+      aZ3 = Wire.read() << 8 | Wire.read();
+      gX3 = Wire.read() << 8 | Wire.read();
+      gY3 = Wire.read() << 8 | Wire.read();
+      gZ3 = Wire.read() << 8 | Wire.read();
+
+   // Serial print acceleromter data
+    Serial.print("MPU 3:");Serial.print(aX3);
+    Serial.print(","); Serial.print(aY3);
+    Serial.print(","); Serial.print(aZ3); 
+    Serial.print(","); Serial.print(gX3);
+    Serial.print(","); Serial.print(gY3);
+    Serial.print(","); Serial.println(gZ3);
+    
+    delay(1000);
+
+    // get raw accelerometer data /////
+      TCA9548A(6);
+      Wire.beginTransmission(MPU);
+      Wire.write(0x3B);
+      Wire.endTransmission(false);
+      Wire.requestFrom(MPU, 12, true);
+      aX4 = Wire.read() << 8 | Wire.read();
+      aY4 = Wire.read() << 8 | Wire.read();
+      aZ4 = Wire.read() << 8 | Wire.read();
+      gX4 = Wire.read() << 8 | Wire.read();
+      gY4 = Wire.read() << 8 | Wire.read();
+      gZ4 = Wire.read() << 8 | Wire.read();
+
+   // Serial print acceleromter data
+    Serial.print("MPU 4:");Serial.print(aX4);
+    Serial.print(","); Serial.print(aY4);
+    Serial.print(","); Serial.print(aZ4); 
+    Serial.print(","); Serial.print(gX4);
+    Serial.print(","); Serial.print(gY4);
+    Serial.print(","); Serial.println(gZ4);
+    
+    delay(1000);
+
+    // get raw accelerometer data /////
+      TCA9548A(7);
+      Wire.beginTransmission(MPU);
+      Wire.write(0x3B);
+      Wire.endTransmission(false);
+      Wire.requestFrom(MPU, 12, true);
+      aX5 = Wire.read() << 8 | Wire.read();
+      aY5 = Wire.read() << 8 | Wire.read();
+      aZ5 = Wire.read() << 8 | Wire.read();
+      gX5 = Wire.read() << 8 | Wire.read();
+      gY5 = Wire.read() << 8 | Wire.read();
+      gZ5 = Wire.read() << 8 | Wire.read();
+
+   // Serial print acceleromter data
+    Serial.print("MPU 5:");Serial.print(aX5);
+    Serial.print(","); Serial.print(aY5);send_interval_ms = millis();
+    Serial.print(","); Serial.print(aZ5); 
+    Serial.print(","); Serial.print(gX5);
+    Serial.print(","); Serial.print(gY5);
+    Serial.print(","); Serial.println(gZ5);
+    
+    delay(2000);
       ////  raw accelerometer data //////
 
-      // generate random temperature, humidity data
-      //float temperature = (float)random(0, 500) / 10;
-      //float humidity = (float)random(0, 1000) / 10;
 
       char messagePayload[MESSAGE_MAX_LEN];
 
-      snprintf(messagePayload, MESSAGE_MAX_LEN, messageData, messageCount++, aX, aY, aZ, gX, gY, gZ);
+      snprintf(messagePayload, MESSAGE_MAX_LEN, messageData, messageCount++, aX1, aY1, aZ1, gX1, gY1, gZ1, aX2, aY2, aZ2, gX2, gY2, gZ2, aX3, aY3, aZ3, gX3, gY3, gZ3, aX4, aY4, aZ4, gX4, gY4, gZ4, aX5, aY5, aZ5, gX5, gY5, gZ5);
       Serial.println(messagePayload);
       EVENT_INSTANCE *message = Esp32MQTTClient_Event_Generate(messagePayload, MESSAGE);
       Esp32MQTTClient_SendEventInstance(message);
