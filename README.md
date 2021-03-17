@@ -32,6 +32,11 @@
 5. create a SQL database 
 
 
+## ESP32 setup over 5G network in Azure:
+\
+![image output](/Esp32/Device/tree_dynamics_copy.jpg)
+
+
 
 ## Setup on RPi4 - GY-521 (MPU6050):
 \
@@ -55,6 +60,3 @@
 
 
 
-## Setting up Device Twin in Azure:
-\
-![image output](/Esp32/Device/tree_dynamics_copy.jpg)
