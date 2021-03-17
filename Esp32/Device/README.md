@@ -24,7 +24,7 @@ mpu6050_demo --> 3D Real-Time Visualization of the MPU6050 (Processing software 
 
 ## 3D Real-Time Visualization of the MPU6050:
 \
-![image output](Esp32/Device/3D_visualization_MPU6050.png)
+![image output](/Users/ibrahim/Downloads/ubc_5G/sensor_networks_azure/Esp32/Device/3D_visualization_MPU6050.png)
 
 
 
