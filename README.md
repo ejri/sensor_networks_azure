@@ -52,3 +52,9 @@
 ## Setting up Device Twin in Azure:
 \
 ![image output](device_twin.png)
+
+
+
+## Setting up Device Twin in Azure:
+\
+![image output](/Esp32/Device/tree_dynamics_copy.jpg)
