@@ -32,7 +32,7 @@
 5. create a SQL database 
 
 
-## ESP32 setup over 5G network in Azure:
+## ESP32 setup over 5G network (data storage: SQL databse in Azure):
 \
 ![image output](/Esp32/Device/tree_dynamics_copy.jpg)
 
