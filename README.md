@@ -38,7 +38,7 @@
 
 ## 3D Real-Time Visualization of the MPU6050:
 \
-![image output](/Esp32/Device/3D_visualization_MPU6050.png)
+![image output](/Esp32/Device/3D_visualization_MPU6050.jpg)
 
 ## Setup on RPi4 - GY-521 (MPU6050):
 \
