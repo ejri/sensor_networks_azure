@@ -5,10 +5,10 @@
 * [x] Phase 1- general architect: connect acceleromter (GY-521 (MPU6050)) to RPi4 and other potential boards (ESP32- LilyGo with sim7000G module)
 * [x] Phase 1- general architect: connect sensing devices to Azure IoT Hub
 * [x] Phase 1- general architect: Save telemetry data in a SQL database on Azure 
-* [ ] Phase 1- general architect: connect 5G module
-* [ ] Phase 1- general architect: connect more sensors
+* [x] Phase 1- general architect: connect 5G module
+* [x] Phase 1- general architect: connect more sensors
 * [x] Phase 1- general architect: add an architect diagram
-* [ ] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
+* [x] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
 * [x] Phase 1- general architect: GDPR, ethical/ data AI approach: fitler data on Edge device before uploading data to Azure
 
 * [ ] Phase 2- use-case 1 architect: custom/general architect

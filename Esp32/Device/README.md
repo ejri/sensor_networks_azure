@@ -2,7 +2,7 @@
 
 device.ino --> LilyGo esp32 sim7000G connected to 5 MPU6050. Pitch, roll, yaw from the 5 sensors are uploaded to a SQL database in Azure through IoT Hub. Connection is 5G (LTE Cat-M). 
 
-SimpleMQTT_esp32_azure_iothub --> backup version of device.ino
+SimpleMQTT_esp32_azure_iothub-5G --> backup version of device.ino
 
 simpleMQTT_esp32_wifi_IoTHub --> esp32 connected to 5 MPU6050. Pitch, roll, yaw from the 5 sensors are uploaded to a SQL database in Azure through IoT Hub. Connection is wifi.  
 
