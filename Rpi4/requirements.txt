@@ -3,5 +3,8 @@ mpu6050-raspberrypi
 azure-iot-device
 RPi.GPIO
 adafruit-circuitpython-tca9548a
+adafruit-circuitpython-mpu6050
+
+
 
 # https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi

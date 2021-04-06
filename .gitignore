@@ -2,3 +2,8 @@ README copy.md
 IoT Hub to Azure SQL database.pdf
 
 Esp32/Device/connection_string.rtf
+
+
+
+# GreenSpaceTree2
+conn_str = "HostName=GreenSpaces.azure-devices.net;DeviceId=GreenSpaceTree2;SharedAccessKey=g8WExc9IQ4aH4AmOkJT6wvDkAkO0n3gPLyFZuV8Wp3k="

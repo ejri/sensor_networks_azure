@@ -51,7 +51,7 @@ def handle_twin(twin):
 
 async def main():
 
-    conn_str = "HostName=GreenSpaces.azure-devices.net;DeviceId=GreenSpaceTree2;SharedAccessKey=g8WExc9IQ4aH4AmOkJT6wvDkAkO0n3gPLyFZuV8Wp3k="
+    conn_str =
     device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
     await device_client.connect()
     
