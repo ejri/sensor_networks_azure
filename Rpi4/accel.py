@@ -7,8 +7,10 @@ from azure.iot.device.aio import IoTHubDeviceClient
 import json
 import RPi.GPIO as GPIO
 
-i2c_address = 0x68
+# i2c_address = 0x68 #actual addres
+i2c_address = 0x70  # address while connected to an i2c multiplexer
 mpu = mpu6050(i2c_address)
+
 
 # Setting pin #24 as output. Example: in
 # setting up device twin, connect an indicator LED at pin24 
@@ -31,7 +33,7 @@ def handle_twin(twin):
 
 async def main():
 
-    conn_str = 
+    conn_str =
     device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
     await device_client.connect()
 
