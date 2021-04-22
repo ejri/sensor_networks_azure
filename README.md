@@ -5,11 +5,17 @@
 * [x] Phase 1- general architect: connect acceleromter (GY-521 (MPU6050)) to RPi4 and other potential boards (ESP32- LilyGo with sim7000G module)
 * [x] Phase 1- general architect: connect sensing devices to Azure IoT Hub
 * [x] Phase 1- general architect: Save telemetry data in a SQL database on Azure 
+* [x] Phase 1- general architect: Visualize data Power BI
 * [x] Phase 1- general architect: connect 5G module
 * [x] Phase 1- general architect: connect more sensors
 * [x] Phase 1- general architect: add an architect diagram
 * [x] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
 * [x] Phase 1- general architect: GDPR, ethical/ data AI approach: fitler data on Edge device before uploading data to Azure
+* [x] Phase 1- general architect: Save telemetry data in a influxDB- Docker image 
+* [ ] Phase 1- general architect: visualize influxDB data -graphana
+* [ ] Phase 1- general architect: Save telemetry data in a influxDB- Azure (telegraf)
+* [ ] Phase 1- general architect: visualize influxDB data -Azure -graphana
+
 
 * [ ] Phase 2- use-case 1 architect: custom/general architect
 * [ ] Phase 2- use-case 1 architect: obtain use-case specific sensors
@@ -17,6 +23,10 @@
 * [ ] Phase 3- use-case 1 architect: Link this IoT system to other systems (see: custom vision in  repo)
 * [ ] Phase 3- use-case 1 architect: architect optimzations
 
+
+## influxdb - docker image:
+\
+![image output](influxdb_wifi_esp32.png)
 
 ## General overview - Telemetry (custom vision in another repo):
 \
