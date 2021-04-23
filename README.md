@@ -12,7 +12,7 @@
 * [x] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
 * [x] Phase 1- general architect: GDPR, ethical/ data AI approach: fitler data on Edge device before uploading data to Azure
 * [x] Phase 1- general architect: Save telemetry data in a influxDB- Docker image 
-* [ ] Phase 1- general architect: visualize influxDB data -graphana
+* [x] Phase 1- general architect: visualize influxDB data -graphana
 * [ ] Phase 1- general architect: Save telemetry data in a influxDB- Azure (telegraf)
 * [ ] Phase 1- general architect: visualize influxDB data -Azure -graphana
 
@@ -27,6 +27,10 @@
 ## influxdb - docker image:
 \
 ![image output](influxdb_wifi_esp32.png)
+
+## influxDB --> Visualization on Graphana - docker image:
+\
+![image output](influxdb_graphana)
 
 ## General overview - Telemetry (custom vision in another repo):
 \
