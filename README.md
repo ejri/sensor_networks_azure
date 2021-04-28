@@ -66,7 +66,7 @@
 
 
 
-## Telemetry data in Azure SQL Database:
+## (all) Telemetry data into CosmosDB:
 \
 ![image output](cosmosDB.png)
 
