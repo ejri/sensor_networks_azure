@@ -4,7 +4,7 @@
 ### to do list
 * [x] Phase 1- general architect: connect acceleromter (GY-521 (MPU6050)) to RPi4 and other potential boards (ESP32- LilyGo with sim7000G module)
 * [x] Phase 1- general architect: connect sensing devices to Azure IoT Hub
-* [x] Phase 1- general architect: Save telemetry data in a SQL database on Azure 
+* [x] Phase 1- general architect: Save telemetry data into Azure SQL / CosmosDB
 * [x] Phase 1- general architect: Visualize data Power BI
 * [x] Phase 1- general architect: connect 5G module
 * [x] Phase 1- general architect: connect more sensors
@@ -63,6 +63,12 @@
 ## Data uploaded to IoT Hub, passed through Stream Analytics:
 \
 ![image output](stream_analytics.png)
+
+
+
+## Telemetry data in Azure SQL Database:
+\
+![image output](cosmosDB.png)
 
 
 ## Telemetry data in Azure SQL Database:
