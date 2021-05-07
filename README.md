@@ -12,9 +12,9 @@
 * [x] Phase 1- general architect: Discuss 2-3 potential use cases in natural assets
 * [x] Phase 1- general architect: GDPR, ethical/ data AI approach: fitler data on Edge device before uploading data to Azure
 * [x] Phase 1- general architect: Save telemetry data in a influxDB- Docker image 
-* [x] Phase 1- general architect: visualize influxDB data -graphana
+* [x] Phase 1- general architect: visualize influxDB data -grafana
 * [ ] Phase 1- general architect: Save telemetry data in a influxDB- Azure (telegraf)
-* [ ] Phase 1- general architect: visualize influxDB data -Azure -graphana
+* [ ] Phase 1- general architect: visualize influxDB data -Azure -grafana
 
 
 * [ ] Phase 2- use-case 1 architect: custom/general architect
@@ -24,15 +24,19 @@
 * [ ] Phase 3- use-case 1 architect: architect optimzations
 
 
+# General overview - Telemetry (influxDB):
+\
+![image output](influxdb_arch.png)
+
 ## influxdb - docker image:
 \
 ![image output](influxdb_wifi_esp32.png)
 
-## influxDB --> Visualization on Graphana - docker image:
+## influxDB --> Visualization on Grafana - docker image:
 \
-![image output](influxdb_graphana)
+![image output](grafana.png)
 
-## General overview - Telemetry (custom vision in another repo):
+# General overview - Telemetry (custom vision in another repo):
 \
 ![image output](rpi_azure.png)
 
@@ -43,7 +47,7 @@
 2. run code specific for each board 
 3. ask for connection string: connection strings are linked to our own project (and are typically unshared outside members of the team)
 4. set up endpoint through IoT Hub or stream/filter data upload through stream analytics
-5. create a SQL database 
+5. create a SQL database / cosmosDB
 
 
 ## ESP32 setup over 5G network (data storage: SQL databse in Azure):
