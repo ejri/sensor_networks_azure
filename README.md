@@ -17,12 +17,15 @@
 * [ ] Phase 1- general architect: visualize influxDB data -Azure -grafana
 
 
-* [ ] Phase 2- use-case 1 architect: custom/general architect
-* [ ] Phase 2- use-case 1 architect: obtain use-case specific sensors
+* [x] Phase 2- use-case 1 architect: custom/general architect
+* [x] Phase 2- use-case 1 architect: obtain use-case specific sensors
 
-* [ ] Phase 3- use-case 1 architect: Link this IoT system to other systems (see: custom vision in  repo)
-* [ ] Phase 3- use-case 1 architect: architect optimzations
+* [x] Phase 3- use-case 1 architect: Link this IoT system to other systems (see: custom vision in  repo)
+* [x] Phase 3- use-case 1 architect: architect optimzations
 
+# Big Picture: This repo and other repos combined:
+\
+![image output](arch.png)
 
 # General overview - Telemetry (influxDB):
 \
