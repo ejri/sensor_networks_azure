@@ -27,8 +27,6 @@
 ###############
 
 
-#!/usr/local/opt/python-3.5.1/bin/python3.5
-# Simple SDI-12 Sensor Reader Copyright Dr. John Liu
 import serial.tools.list_ports
 import serial
 import time
@@ -68,6 +66,34 @@ def read_soil():
     # teros_address_info_1="Sensor address converted to 1:"+str(sdi_12_line.decode('UTF-8'))
     # print(teros_address_info_1)
 
+    ser.write(b"2I!")  # Data logger command. Request information from sensor 2.
+    sdi_12_line_2 = ser.readline()
+    sdi_12_line_2 = sdi_12_line_2[:-2]  # remove \r and \n
+    teros_address_info_2 = str(sdi_12_line_2.decode("UTF-8"))[17:]
+    print(teros_address_info_2)
+    # print("Sensor info:", sdi_12_line_2.decode("utf-8"))
+
+    ser.write(b"2M!")  # Data logger command. Request information from sensor 1.
+    sdi_12_line_2 = ser.readline()
+    sdi_12_line_2 = ser.readline()
+    ser.write(b"2D0!")  # Data logger command. Request all data from sensor 1.
+    sdi_12_line_2 = ser.readline()
+    sdi_12_line_2 = sdi_12_line_2[:-2]  # remove \r and \n
+    teros_reading_2 = "Sensor " + str(sdi_12_line_2.decode("UTF-8"))
+    print(teros_reading_2)
+    k_2=1
+    for index_2,value_2 in enumerate(teros_reading_2):
+        if value_2 == '-':
+            negative_value_2=index_2
+            k_2=0
+    if k_2==0:
+        teros_reading_2=teros_reading_2[:negative_value_2] + ("+")+teros_reading_2[negative_value_2:]
+        print(teros_reading_2)
+
+    teros_2_data = [x for x in teros_reading_2.split("+")]
+    teros_2_data[0]=teros_address_info_2
+    print(teros_2_data)
+    
     ser.write(b"1I!")  # Data logger command. Request information from sensor 1.
     sdi_12_line_1 = ser.readline()
     sdi_12_line_1 = sdi_12_line_1[:-2]  # remove \r and \n
