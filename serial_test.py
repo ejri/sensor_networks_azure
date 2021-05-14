@@ -1,16 +1,8 @@
-################
-###############
-## find the specific port a device is connected to:
-# $ ls -l /dev/serial/by-id
-###############
-###############
-###############
-###############
-
-# parts of the code adapted from Dr. John Lui's code (sdi_12_reading_v1_0.py)
-
-
 # ejri
+
+
+## connections: Meter's Teros 12 sensor conencted using Dr. John Lui's sdi-12 adapter (https://liudr.wordpress.com/gadget/sdi-12-usb-adapter/)
+# parts of the code adapted from Dr. John Lui's code (sdi_12_reading_v1_0.py)
 
 # Notes:
 # conencting the devices through a port by id is recommended to prevent connections to wrong ports (GSM ports, etc.)
@@ -24,6 +16,19 @@
     # print(teros_address_info_1)
 # read sensor individually 
 
+
+################
+###############
+## find the specific port a device is connected to:
+# $ ls -l /dev/serial/by-id
+###############
+###############
+###############
+###############
+
+
+#!/usr/local/opt/python-3.5.1/bin/python3.5
+# Simple SDI-12 Sensor Reader Copyright Dr. John Liu
 import serial.tools.list_ports
 import serial
 import time
@@ -55,44 +60,72 @@ def read_soil():
     print(teros_address)
     # print("\nSensor address:", sdi_12_address.decode("utf-8"))
 
+    ################### defining each sensor to its own unique address. default is 0, so change the other connected ones.
+    # ser.write(sdi_12_address + b"A1!") # Data logger command.
+    # Request to the sensor to change its address from 1 to a new address of 0.
+    # sdi_12_line = ser.readline()
+    # sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
+    # teros_address_info_1="Sensor address converted to 1:"+str(sdi_12_line.decode('UTF-8'))
+    # print(teros_address_info_1)
 
     ser.write(b"1I!")  # Data logger command. Request information from sensor 1.
-    sdi_12_line = ser.readline()
-    sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
-    teros_address_info = "Sensor 1 info:" + str(sdi_12_line.decode("UTF-8"))
-    print(teros_address_info)
-    # print("Sensor info:", sdi_12_line.decode("utf-8"))
+    sdi_12_line_1 = ser.readline()
+    sdi_12_line_1 = sdi_12_line_1[:-2]  # remove \r and \n
+    teros_address_info_1 = str(sdi_12_line_1.decode("UTF-8"))[17:]
+    print(teros_address_info_1)
+    # print("Sensor info:", sdi_12_line_1.decode("utf-8"))
 
     ser.write(b"1M!")  # Data logger command. Request information from sensor 1.
-    sdi_12_line = ser.readline()
-    sdi_12_line = ser.readline()
+    sdi_12_line_1 = ser.readline()
+    sdi_12_line_1 = ser.readline()
     ser.write(b"1D0!")  # Data logger command. Request all data from sensor 1.
-    sdi_12_line = ser.readline()
-    sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
-    teros_reading_1 = "Sensor " + str(sdi_12_line.decode("UTF-8"))
+    sdi_12_line_1 = ser.readline()
+    sdi_12_line_1 = sdi_12_line_1[:-2]  # remove \r and \n
+    teros_reading_1 = "Sensor " + str(sdi_12_line_1.decode("UTF-8"))
     print(teros_reading_1)
-    teros_1 = [x for x in teros_reading_1.split("+")]
-    print(teros_1)
+    k_1=1
+    for index_1,value_1 in enumerate(teros_reading_1):
+        if value_1 == '-':
+            negative_value_1=index_1
+            k_1=0
+    if k_1==0:
+        teros_reading_1=teros_reading_1[:negative_value_1] + ("+")+teros_reading_1[negative_value_1:]
+        print(teros_reading_1)
+
+    teros_1_data = [x for x in teros_reading_1.split("+")]
+    teros_1_data[0]=teros_address_info_1
+    print(teros_1_data)
+
     # print("Sensor reading:", sdi_12_line.decode("utf-8"))
 
     ser.write(b"0I!")  # Data logger command. Request information from sensor 0.
-    sdi_12_line = ser.readline()
-    sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
-    teros_address_info = "Sensor 0 info:" + str(sdi_12_line.decode("UTF-8"))
-    print(teros_address_info)
-    # print("Sensor info:", sdi_12_line.decode("utf-8"))
+    sdi_12_line_0 = ser.readline()
+    sdi_12_line_0 = sdi_12_line_0[:-2]  # remove \r and \n
+    teros_address_info_0 = str(sdi_12_line_0.decode("UTF-8"))[17:]
+    print(teros_address_info_0)
+    # print("Sensor info:", sdi_12_line_0.decode("utf-8"))
 
     ser.write(b"0M!")  # Data logger command. Request information from sensor 0.
-    sdi_12_line = ser.readline()
-    sdi_12_line = ser.readline()
+    sdi_12_line_0 = ser.readline()
+    sdi_12_line_0 = ser.readline()
     ser.write(b"0D0!")  # Data logger command. Request all data from sensor 0.
-    sdi_12_line = ser.readline()
-    sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
-    teros_reading_0 = "Sensor " + str(sdi_12_line.decode("UTF-8"))
+    sdi_12_line_0 = ser.readline()
+    sdi_12_line_0 = sdi_12_line_0[:-2]  # remove \r and \n
+    teros_reading_0 = "Sensor " + str(sdi_12_line_0.decode("UTF-8"))
     print(teros_reading_0)
-    teros_0 = [x for x in teros_reading_0.split("+")]
-    print(teros_0)
-    # print("Sensor reading:", sdi_12_line.decode("utf-8"))
+    k_0=1
+    for index_0,value_0 in enumerate(teros_reading_0):
+        if value_0 == '-':
+            negative_value_0=index_0
+            k_0=0
+    if k_0==0:
+        teros_reading_0=teros_reading_0[:negative_value_0] + ("+")+teros_reading_0[negative_value_0:]
+        print(teros_reading_0)
+
+    teros_0_data = [x for x in teros_reading_0.split("+")]
+    teros_0_data[0]=teros_address_info_0
+    print(teros_0_data)
+    # print("Sensor reading:", sdi_12_line_0.decode("utf-8"))
 
     ser.close()
 
