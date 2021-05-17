@@ -27,6 +27,8 @@
 ###############
 
 
+#!/usr/local/opt/python-3.5.1/bin/python3.5
+# Simple SDI-12 Sensor Reader Copyright Dr. John Liu
 import serial.tools.list_ports
 import serial
 import time
@@ -40,10 +42,10 @@ def read_soil():
     ser = serial.Serial(
         port=port_device,
         baudrate=9600,
-        parity=serial.PARITY_EVEN,
-        stopbits=serial.STOPBITS_ONE,
-        timeout=10,
-        bytesize=serial.SEVENBITS,
+        #parity=serial.PARITY_EVEN,
+        #stopbits=serial.STOPBITS_ONE,
+        timeout=10
+        #bytesize=serial.SEVENBITS,
     )
     time.sleep(2.5)  # delay at least 1 second delay of the adapter.
 
@@ -65,6 +67,7 @@ def read_soil():
     # sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
     # teros_address_info_1="Sensor address converted to 1:"+str(sdi_12_line.decode('UTF-8'))
     # print(teros_address_info_1)
+    ################### defining each sensor to its own unique address. default is 0, so change the other connected ones.
 
     ser.write(b"2I!")  # Data logger command. Request information from sensor 2.
     sdi_12_line_2 = ser.readline()
@@ -152,6 +155,37 @@ def read_soil():
     teros_0_data[0]=teros_address_info_0
     print(teros_0_data)
     # print("Sensor reading:", sdi_12_line_0.decode("utf-8"))
+
+    ### analog readings
+
+
+
+    # ser.write(
+    #     b"?!"
+    # )  # Data logger command. Request for a response from any sensor listening on the data line.
+    
+    # ser.write(b"z!")
+    # ser.write(b"zI!")  # Data logger command. Request information from sensor 2.
+    # sdi_12_line_analog = ser.readline()
+    # sdi_12_line_analog = sdi_12_line_analog[:-2]  # remove \r and \n
+    # analog_firmware = str(sdi_12_line_analog.decode("UTF-8"))[17:]
+    # print(analog_firmware)
+    # # print("Sensor info:", sdi_12_line_analog.decode("utf-8"))
+
+    ser.write(b"zM!")  # 
+    # Data logger command. Request all data from analog sensors.
+    sdi_12_line_analog = ser.readline()
+    sdi_12_line_analog = ser.readline()
+    ser.write(b"zD0!") 
+    sdi_12_line_analog = ser.readline()
+    sdi_12_line_analog = sdi_12_line_analog[:-2]  # remove \r and \n
+    analog_reading = "Analog Sensor: " + str(sdi_12_line_analog.decode("UTF-8"))
+    print(analog_reading)
+
+    analog_data = [x for x in analog_reading.split("+")]
+    analog_data[0]='analog_reading'
+    print(analog_data)
+
 
     ser.close()
 
