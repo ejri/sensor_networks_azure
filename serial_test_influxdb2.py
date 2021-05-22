@@ -233,28 +233,28 @@ def read_soil():
                                                 "cellular connection": "LTE-M catM"
                                                 ,"modem": "BG96"},
                                             "fields": {
-                "terros_15_serial": teros_0_data[0],
-                "terros_15_VWC": teros_0_data[1],
-                "terros_15_temp": teros_0_data[2],
-                "terros_15_EC": teros_0_data[3],
-                "terros_30_serial": teros_1_data[0],
-                "terros_30_VWC": teros_1_data[1],
-                "terros_30_temp": teros_1_data[2],
-                "terros_30_EC": teros_1_data[3],
-                # "terros_60_serial": teros_2_data[0],
-                # "terros_60_VWC": teros_2_data[1],
-                # "terros_60_temp": teros_2_data[2],
-                # "terros_60_EC": teros_2_data[3],
-                "commercial_15": analog_data[1],
-                "commercial_30": analog_data[2],
-                "commercial_60": analog_data[3]
+                "terros_15_serial": float(teros_0_data[0]),
+                "terros_15_VWC": float(teros_0_data[1]),
+                "terros_15_temp": float(teros_0_data[2]),
+                "terros_15_EC": float(teros_0_data[3]),
+                "terros_30_serial": float(teros_1_data[0]),
+                "terros_30_VWC": float(teros_1_data[1]),
+                "terros_30_temp": float(teros_1_data[2]),
+                "terros_30_EC": float(teros_1_data[3]),
+                # "terros_60_serial": float(teros_2_data[0]),
+                # "terros_60_VWC": float(teros_2_data[1]),
+                # "terros_60_temp": float(teros_2_data[2]),
+                # "terros_60_EC": float(teros_2_data[3]),
+                "commercial_15": float(analog_data[1]),
+                "commercial_30": float(analog_data[2]),
+                "commercial_60": float(analog_data[3])
                 },
                 
                 
                 "time": time_utc})
 
 
-    _client.close()
+    
 
 
 schedule.every(60).seconds.do(read_soil)
