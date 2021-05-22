@@ -210,7 +210,7 @@ def read_soil():
     _org = 
     _token = 
     # Store the URL of your InfluxDB instance
-    _url="10.0.0.41:8086/"
+    _url="http://data.sustain.ubc.ca:8086/"
 
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
