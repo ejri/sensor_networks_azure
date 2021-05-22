@@ -206,9 +206,9 @@ def read_soil():
     ser.close()
 
     # influx configuration - edit these
-    _bucket = 
-    _org = 
-    _token = 
+    _bucket = ""
+    _org = ""
+    _token = ""
     # Store the URL of your InfluxDB instance
     _url="http://data.sustain.ubc.ca:8086/"
 
@@ -233,15 +233,15 @@ def read_soil():
                                                 "cellular connection": "LTE-M catM"
                                                 ,"modem": "BG96"},
                                             "fields": {
-                "terros_15_serial": float(teros_0_data[0]),
+                "terros_15_serial": teros_0_data[0],
                 "terros_15_VWC": float(teros_0_data[1]),
                 "terros_15_temp": float(teros_0_data[2]),
                 "terros_15_EC": float(teros_0_data[3]),
-                "terros_30_serial": float(teros_1_data[0]),
+                "terros_30_serial": teros_1_data[0],
                 "terros_30_VWC": float(teros_1_data[1]),
                 "terros_30_temp": float(teros_1_data[2]),
                 "terros_30_EC": float(teros_1_data[3]),
-                # "terros_60_serial": float(teros_2_data[0]),
+                # "terros_60_serial": teros_2_data[0],
                 # "terros_60_VWC": float(teros_2_data[1]),
                 # "terros_60_temp": float(teros_2_data[2]),
                 # "terros_60_EC": float(teros_2_data[3]),
