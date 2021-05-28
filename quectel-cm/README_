@@ -1,0 +1,24 @@
+Command I'm using to start quectel-CM and have dual stack:
+
+$ chmod +x quectel*
+$ sudo bin/quectel-CM -4 -6 &
+
+
+#### at+cfun=1,1   ### restart modem
+at+cgdcont?        ### status
+at+cfun=0	  ## disable
+at+cgdcont=1,"ipv4v6","ltemobile.apn"
+at+cgpaddr
+at+qeng="servingcell"
+
+or, if I want to save quectel-cm log file:
+
+$ sudo bin/quectel-CM -4 -6 -f /home/pi/tmp/quectel-cm.log &
+
+
+If you have to build it yourself on RPi:
+1. unzip Quectel_QConnectManager_Linux_V1.6.0.24.zip
+2. Go to quectel-CM directory and run:
+    $ make
+    
+
