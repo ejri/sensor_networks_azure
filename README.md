@@ -16,6 +16,7 @@
 * [ ] Phase 1- general architect: Save telemetry data in a influxDB- Azure (telegraf)
 * [ ] Phase 1- general architect: visualize influxDB data -Azure -grafana
 
+* [x] Phase 1- SSH into RPi over cellular ipv6
 
 * [x] Phase 2- use-case 1 architect: custom/general architect
 * [x] Phase 2- use-case 1 architect: obtain use-case specific sensors
