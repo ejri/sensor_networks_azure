@@ -4,6 +4,9 @@ azure-iot-device
 RPi.GPIO
 adafruit-circuitpython-tca9548a
 adafruit-circuitpython-mpu6050
+influxdb_client
+schedule
+
 
 
 
