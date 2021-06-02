@@ -1,10 +1,9 @@
-
 # ejri
 
-# Tree dynamics sensing device 
-# Fair View Grove 
-# Tree ID: 
-# RPi 4 connected to 5 IMUs, capturing tree dynamics 
+# Tree dynamics sensing device
+# Fair View Grove
+# Tree ID:
+# RPi 4 connected to 5 IMUs, capturing tree dynamics
 
 import serial.tools.list_ports
 import serial
@@ -96,8 +95,6 @@ async def main():
     [ax5, ay5, az5, gx5, gy5, gz5] = np.round([ax5, ay5, az5, gx5, gy5, gz5], 2)
     temp5 = "{0:0.2f}".format(mpu5.temperature)
 
-
-
     print("MPU_1")
     print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (mpu1.acceleration))
     print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s" % (mpu1.gyro))
@@ -184,7 +181,7 @@ async def main():
     twin = await device_client.get_twin()
     handle_twin(twin)
 
-    time.sleep(10)    
+    time.sleep(10)
 
     await device_client.disconnect()
     print("Successfully Uploaded Tree Dynamics Data to Azure")
@@ -194,72 +191,79 @@ async def main():
     _org = ""
     _token = ""
     # Store the URL of your InfluxDB instance
-    _url="http://data.sustain.ubc.ca:8086/"
+    _url = "http://data.sustain.ubc.ca:8086/"
 
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
 
     with InfluxDBClient(url=_url, token=_token, org=_org) as _client:
 
-        with _client.write_api(write_options=WriteOptions(batch_size=1_000,
-                                                      flush_interval=10_000,
-                                                      jitter_interval=2_000,
-                                                      retry_interval=5_000,
-                                                      max_retries=5,
-                                                      max_retry_delay=30_000,
-                                                      exponential_base=2)) as _write_client:
+        with _client.write_api(
+            write_options=WriteOptions(
+                batch_size=1_000,
+                flush_interval=10_000,
+                jitter_interval=2_000,
+                retry_interval=5_000,
+                max_retries=5,
+                max_retry_delay=30_000,
+                exponential_base=2,
+            )
+        ) as _write_client:
 
-
-            _write_client.write(_bucket, _org, {"measurement": "tree_dynamics",
-                                            "tags": {
-                                                "location": "FiarView",
-                                                "tree type": "Red Oak",
-                                                "cellular connection": "LTE-M catM"
-                                                ,"modem": "BG96"},
-                                            "fields": {
-                "MPU_1_aX" : ax1,
-                "MPU_1_aY" : ay1,
-                "MPU_1_aZ" : az1,
-                "MPU_1_gX" : gx1,
-                "MPU_1_gY" : gy1,
-                "MPU_1_gZ" : gz1,
-                "MPU_1_temp" : temp1,
-                "MPU_2_aX" : ax2,
-                "MPU_2_aY" : ay2,
-                "MPU_2_aZ" : az2,
-                "MPU_2_gX" : gx2,
-                "MPU_2_gY" : gy2,
-                "MPU_2_gZ" : gz2,
-                "MPU_2_temp" : temp2,
-                "MPU_3_aX" : ax3,
-                "MPU_3_aY" : ay3,
-                "MPU_3_aZ" : az3,
-                "MPU_3_gX" : gx3,
-                "MPU_3_gY" : gy3,
-                "MPU_3_gZ" : gz3,
-                "MPU_3_temp" : temp3,
-                "MPU_4_aX" : ax4,
-                "MPU_4_aY" : ay4,
-                "MPU_4_aZ" : az4,
-                "MPU_4_gX" : gx4,
-                "MPU_4_gY" : gy4,
-                "MPU_4_gZ" : gz4,
-                "MPU_4_temp" : temp4,
-                "MPU_5_aX" : ax5,
-                "MPU_5_aY" : ay5,
-                "MPU_5_aZ" : az5,
-                "MPU_5_gX" : gx5,
-                "MPU_5_gY" : gy5,
-                "MPU_5_gZ" : gz5,
-                "MPU_5_temp" : temp5
+            _write_client.write(
+                _bucket,
+                _org,
+                {
+                    "measurement": "tree_dynamics",
+                    "tags": {
+                        "location": "FiarView",
+                        "tree type": "Red Oak",
+                        "cellular connection": "LTE-M catM",
+                        "modem": "BG96",
+                    },
+                    "fields": {
+                        "MPU_1_aX": ax1,
+                        "MPU_1_aY": ay1,
+                        "MPU_1_aZ": az1,
+                        "MPU_1_gX": gx1,
+                        "MPU_1_gY": gy1,
+                        "MPU_1_gZ": gz1,
+                        "MPU_1_temp": temp1,
+                        "MPU_2_aX": ax2,
+                        "MPU_2_aY": ay2,
+                        "MPU_2_aZ": az2,
+                        "MPU_2_gX": gx2,
+                        "MPU_2_gY": gy2,
+                        "MPU_2_gZ": gz2,
+                        "MPU_2_temp": temp2,
+                        "MPU_3_aX": ax3,
+                        "MPU_3_aY": ay3,
+                        "MPU_3_aZ": az3,
+                        "MPU_3_gX": gx3,
+                        "MPU_3_gY": gy3,
+                        "MPU_3_gZ": gz3,
+                        "MPU_3_temp": temp3,
+                        "MPU_4_aX": ax4,
+                        "MPU_4_aY": ay4,
+                        "MPU_4_aZ": az4,
+                        "MPU_4_gX": gx4,
+                        "MPU_4_gY": gy4,
+                        "MPU_4_gZ": gz4,
+                        "MPU_4_temp": temp4,
+                        "MPU_5_aX": ax5,
+                        "MPU_5_aY": ay5,
+                        "MPU_5_aZ": az5,
+                        "MPU_5_gX": gx5,
+                        "MPU_5_gY": gy5,
+                        "MPU_5_gZ": gz5,
+                        "MPU_5_temp": temp5,
+                    },
+                    "time": time_utc,
                 },
-                
-                
-                "time": time_utc})
+            )
     print("Successfully Uploaded Tree Dynamics Data to InfluxDB")
     await asyncio.sleep(2)
     print("Stopping main()... at 60 seconds interval")
-
 
 
 async def do_stuff_periodically(interval, periodic_function):
@@ -271,12 +275,12 @@ async def do_stuff_periodically(interval, periodic_function):
         )
 
 
-
-if __name__ == "__main__": 
+if __name__ == "__main__":
     asyncio.run(do_stuff_periodically(60, main))
 
-
-
-
-
-
+    # run anomaly detection model. if anomaly, collect multiple smaples
+    anomaly_detection = 0
+    if anomaly_detection == 1:
+        print("Anomaly detected.")
+        for x in range(0, 10):
+            asyncio.run(do_stuff_periodically(10, main))
