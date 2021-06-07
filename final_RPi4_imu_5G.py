@@ -133,7 +133,7 @@ async def main():
     # json file
 
     data = {}
-    data["deviceID"] = "GreenSpaceTree2"
+    data["deviceID"] = "GreenSpaceTree2_RPi"
     data["board"] = "RPi4"
     data["gsm_mod"] = "BG96"
     data["location"] = "FairView"
@@ -216,8 +216,8 @@ async def main():
                 {
                     "measurement": "tree_dynamics",
                     "tags": {
-                        "location": "FiarView",
-                        "tree type": "Red Oak",
+                        "location": "FiarView, Red Oak",
+                        "Device ID": "GreenSpaceTree2_RPi",
                         "cellular connection": "LTE-M catM",
                         "modem": "BG96",
                     },
@@ -276,11 +276,35 @@ async def do_stuff_periodically(interval, periodic_function):
 
 
 if __name__ == "__main__":
-    asyncio.run(do_stuff_periodically(60, main))
+    while True:
+        try:
+            asyncio.run(do_stuff_periodically(60, main))
 
-    # run anomaly detection model. if anomaly, collect multiple smaples
-    anomaly_detection = 0
-    if anomaly_detection == 1:
-        print("Anomaly detected.")
-        for x in range(0, 10):
-            asyncio.run(do_stuff_periodically(10, main))
+            # run anomaly detection model. if anomaly, collect multiple smaples
+            anomaly_detection = 0
+            if anomaly_detection == 1:
+                print("Anomaly detected.")
+                for x in range(0, 10):
+                    asyncio.run(do_stuff_periodically(10, main))
+
+        except:
+
+            print(
+                "Remote I/O error. Error connecting to device... trying again in 10 seconds."
+            )
+            time.sleep(10)
+
+            # Create I2C bus as normal
+            i2c = busio.I2C(board.SCL, board.SDA)
+
+            # Create the TCA9548A object and give it the I2C bus
+            tca = adafruit_tca9548a.TCA9548A(i2c)
+
+            # For each sensor, read using the TCA9548A channel instead of the I2C object
+
+            mpu1 = adafruit_mpu6050.MPU6050(tca[2])
+            mpu2 = adafruit_mpu6050.MPU6050(tca[3])
+            mpu3 = adafruit_mpu6050.MPU6050(tca[4])
+            mpu4 = adafruit_mpu6050.MPU6050(tca[5])
+            mpu5 = adafruit_mpu6050.MPU6050(tca[6])
+            continue
