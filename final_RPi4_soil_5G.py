@@ -269,7 +269,7 @@ async def main():
     time.sleep(10)
 
     await device_client.disconnect()
-    print("Successfully Uploaded Tree Dynamics Data to Azure")
+    print("Successfully Uploaded Soil Data to Azure")
 
     # influx configuration - edit these
     _bucket = ""
@@ -326,7 +326,7 @@ async def main():
                     "time": time_utc,
                 },
             )
-    print("Successfully Uploaded Tree Dynamics Data to InfluxDB @ UDL")
+    print("Successfully Uploaded Soil Data to InfluxDB @ UDL")
 
     # influx configuration - edit these
     ifuser = ""
@@ -372,7 +372,7 @@ async def main():
     # write the measurement
     ifclient.write_points(body)
     await asyncio.sleep(2)
-    print("Successfully Uploaded Tree Dynamics Data to InfluxDB @ localhost")
+    print("Successfully Uploaded Soil Data to InfluxDB @ localhost")
     time.sleep(2)
     print("Stopping main()... at 120 seconds interval")
 
