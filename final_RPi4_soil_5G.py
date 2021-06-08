@@ -1,8 +1,17 @@
 # ejri
 
+# Soil sensing device
+# Fair View Grove
+# Tree ID:
+# RPi 4 connected to Teros 12 sensors to measure soil temperature, volumetric soil water content,
+# dielectric constant at a range of frequencies, and soil electical conductivity
 
-## connections: Meter's Teros 12 sensor conencted using Dr. John Lui's sdi-12 adapter (https://liudr.wordpress.com/gadget/sdi-12-usb-adapter/)
+## connections: (Meter Group's) Teros 12 sensor conencted using Dr. John Lui's sdi-12 adapter (https://liudr.wordpress.com/gadget/sdi-12-usb-adapter/)
 # parts of the code adapted from Dr. John Lui's code (sdi_12_reading_v1_0.py)
+
+
+# Data is uploaded to Azure IoT Hub, UDL (InfluxDB), and saved locally (InfluxDB, localhost)
+
 
 # Notes:
 # conencting the devices through a port by id is recommended to prevent connections to wrong ports (GSM ports, etc.)
@@ -35,14 +44,37 @@ import serial.tools.list_ports
 import serial
 import time
 import re
-
 import datetime
 import psutil
-from influxdb import InfluxDBClient
 import schedule
+import asyncio
+import json
+import numpy as np
+import time
+
+# Azure
+from azure.iot.device.aio import IoTHubDeviceClient
+
+# influxDB at UDL
+from influxdb_client import InfluxDBClient, Point, WriteOptions
+
+# influxDB at Localhost
+from influxdb import InfluxDBClient as iflux_localhost
 
 
-def read_soil():
+# define twin  function handle
+def handle_twin(twin):
+    print("Twin received", twin)
+    if "desired" in twin:
+        desired = twin["desired"]
+
+
+async def main():
+
+    conn_str = ""
+    device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
+    await device_client.connect()
+
     # Store the device name to open port with later in the script.
     port_device = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AC00Z2TL-if00-port0"
 
@@ -205,51 +237,171 @@ def read_soil():
 
     ser.close()
 
+    data = {}
+    data["deviceID"] = "GreenSpaceTree3"
+    data["board"] = "RPi4"
+    data["gsm_mod"] = "BG96"
+    data["location"] = "FairView"
+    data["TreeType"] = "Red Oak"
+    data["terros_15_serial"] = teros_0_data[0]
+    data["terros_15_VWC"] = float(teros_0_data[1])
+    data["terros_15_temp"] = float(teros_0_data[2])
+    data["terros_15_EC"] = float(teros_0_data[3])
+    data["terros_30_serial"] = teros_1_data[0]
+    data["terros_30_VWC"] = float(teros_1_data[1])
+    data["terros_30_temp"] = float(teros_1_data[2])
+    data["terros_30_EC"] = float(teros_1_data[3])
+    data["terros_60_serial"] = 1  # teros_2_data[0]
+    data["terros_60_VWC"] = 1  # float(teros_2_data[1])
+    data["terros_60_temp"] = 1  # float(teros_2_data[2])
+    data["terros_60_EC"] = 1  # float(teros_2_data[3])
+    data["commercial_15"] = float(analog_data[1])
+    data["commercial_30"] = float(analog_data[2])
+    data["commercial_60"] = float(analog_data[3])
+    json_body = json.dumps(data)
+    print("Sending message: ", json_body)
+    await device_client.send_message(json_body)
+
+    # get device twin status and command
+    twin = await device_client.get_twin()
+    handle_twin(twin)
+
+    time.sleep(10)
+
+    await device_client.disconnect()
+    print("Successfully Uploaded Tree Dynamics Data to Azure")
+
     # influx configuration - edit these
-    ifuser = "ibrahim"
-    ifpass = "Dift1234"
-    ifdb = "ground_sensors"
-    ifhost = "10.0.0.41"
-    ifport = 8086
-    measurement_name = "soil"
+    _bucket = ""
+    _org = ""
+    _token = ""
+    # Store the URL of your InfluxDB instance
+    _url = "http://data.sustain.ubc.ca:8086/"
 
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
 
+    with InfluxDBClient(url=_url, token=_token, org=_org) as _client:
+
+        with _client.write_api(
+            write_options=WriteOptions(
+                batch_size=1_000,
+                flush_interval=10_000,
+                jitter_interval=2_000,
+                retry_interval=5_000,
+                max_retries=5,
+                max_retry_delay=30_000,
+                exponential_base=2,
+            )
+        ) as _write_client:
+
+            _write_client.write(
+                _bucket,
+                _org,
+                {
+                    "measurement": "Soil",
+                    "tags": {
+                        "location": "FiarView, Red Oak",
+                        "Device ID": "GreenSpaceTree3",
+                        "cellular connection": "LTE-M catM",
+                        "modem": "BG96",
+                    },
+                    "fields": {
+                        "terros_15_serial": teros_0_data[0],
+                        "terros_15_VWC": float(teros_0_data[1]),
+                        "terros_15_temp": float(teros_0_data[2]),
+                        "terros_15_EC": float(teros_0_data[3]),
+                        "terros_30_serial": teros_1_data[0],
+                        "terros_30_VWC": float(teros_1_data[1]),
+                        "terros_30_temp": float(teros_1_data[2]),
+                        "terros_30_EC": float(teros_1_data[3]),
+                        "terros_60_serial": teros_2_data[0],
+                        "terros_60_VWC": 1,  # float(teros_2_data[1]),
+                        "terros_60_temp": 1,  # float(teros_2_data[2]),
+                        "terros_60_EC": 1,  # float(teros_2_data[3]),
+                        "commercial_15": float(analog_data[1]),
+                        "commercial_30": float(analog_data[2]),
+                        "commercial_60": float(analog_data[3]),
+                    },
+                    "time": time_utc,
+                },
+            )
+    print("Successfully Uploaded Tree Dynamics Data to InfluxDB @ UDL")
+
+    # influx configuration - edit these
+    ifuser = ""
+    ifpass = ""
+    ifdb = ""
+    ifhost = "localhost"
+    ifport = 8086
+
     # format the data as a single measurement for influx
     body = [
         {
-            "measurement": measurement_name,
-            "time_utc": time_utc,
+            "measurement": "Soil",
+            "tags": {
+                "location": "FiarView, Red Oak",
+                "Device ID": "GreenSpaceTree3",
+                "cellular connection": "LTE-M catM",
+                "modem": "BG96",
+            },
             "fields": {
                 "terros_15_serial": teros_0_data[0],
-                "terros_15_VWC": teros_0_data[1],
-                "terros_15_temp": teros_0_data[2],
-                "terros_15_EC": teros_0_data[3],
+                "terros_15_VWC": float(teros_0_data[1]),
+                "terros_15_temp": float(teros_0_data[2]),
+                "terros_15_EC": float(teros_0_data[3]),
                 "terros_30_serial": teros_1_data[0],
-                "terros_30_VWC": teros_1_data[1],
-                "terros_30_temp": teros_1_data[2],
-                "terros_30_EC": teros_1_data[3],
-                # "terros_60_serial": teros_2_data[0],
-                # "terros_60_VWC": teros_2_data[1],
-                # "terros_60_temp": teros_2_data[2],
-                # "terros_60_EC": teros_2_data[3],
-                "commercial_15": analog_data[1],
-                "commercial_30": analog_data[2],
-                "commercial_60": analog_data[3],
+                "terros_30_VWC": float(teros_1_data[1]),
+                "terros_30_temp": float(teros_1_data[2]),
+                "terros_30_EC": float(teros_1_data[3]),
+                "terros_60_serial": teros_2_data[0],
+                "terros_60_VWC": 1,  # float(teros_2_data[1]),
+                "terros_60_temp": 1,  # float(teros_2_data[2]),
+                "terros_60_EC": 1,  # float(teros_2_data[3]),
+                "commercial_15": float(analog_data[1]),
+                "commercial_30": float(analog_data[2]),
+                "commercial_60": float(analog_data[3]),
             },
+            "time": time_utc,
         }
     ]
 
     # connect to influx
-    ifclient = InfluxDBClient(ifhost, ifport, ifuser, ifpass, ifdb)
+    ifclient = iflux_localhost(ifhost, ifport, ifuser, ifpass, ifdb)
 
     # write the measurement
     ifclient.write_points(body)
+    await asyncio.sleep(2)
+    print("Successfully Uploaded Tree Dynamics Data to InfluxDB @ localhost")
+    time.sleep(2)
+    print("Stopping main()... at 120 seconds interval")
 
 
-schedule.every(60).minutes.do(read_soil)
+async def do_stuff_periodically(interval, periodic_function):
+    while True:
+        print("Starting main()")
+        await asyncio.gather(
+            asyncio.sleep(interval),
+            periodic_function(),
+        )
 
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
+
+if __name__ == "__main__":
+    while True:
+        try:
+            asyncio.run(do_stuff_periodically(120, main))
+
+            # run anomaly detection model. if anomaly, collect multiple smaples
+            anomaly_detection = 0
+            if anomaly_detection == 1:
+                print("Anomaly detected.")
+                for x in range(0, 10):
+                    asyncio.run(do_stuff_periodically(10, main))
+
+        except:
+
+            print(
+                "Remote I/O error. Error connecting to device... trying again in 10 seconds."
+            )
+            time.sleep(10)
+            continue

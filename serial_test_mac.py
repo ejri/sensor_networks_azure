@@ -37,14 +37,15 @@ import time
 import re
 
 import datetime
-import psutil
-from influxdb import InfluxDBClient
-import schedule
 
 
 def read_soil():
     # Store the device name to open port with later in the script.
-    port_device = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AC00Z2TL-if00-port0"
+
+    #######on a raspberry pi
+    # port_device = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AC00Z2TL-if00-port0"
+    #######on a mac
+    port_device = "/dev/tty.usbserial-AC00Z2TL"
 
     ser = serial.Serial(
         port=port_device,
@@ -205,51 +206,5 @@ def read_soil():
 
     ser.close()
 
-    # influx configuration - edit these
-    ifuser = "ibrahim"
-    ifpass = "Dift1234"
-    ifdb = "ground_sensors"
-    ifhost = "10.0.0.41"
-    ifport = 8086
-    measurement_name = "soil"
 
-    # take a timestamp for this measurement
-    time_utc = datetime.datetime.utcnow()
-
-    # format the data as a single measurement for influx
-    body = [
-        {
-            "measurement": measurement_name,
-            "time_utc": time_utc,
-            "fields": {
-                "terros_15_serial": teros_0_data[0],
-                "terros_15_VWC": teros_0_data[1],
-                "terros_15_temp": teros_0_data[2],
-                "terros_15_EC": teros_0_data[3],
-                "terros_30_serial": teros_1_data[0],
-                "terros_30_VWC": teros_1_data[1],
-                "terros_30_temp": teros_1_data[2],
-                "terros_30_EC": teros_1_data[3],
-                # "terros_60_serial": teros_2_data[0],
-                # "terros_60_VWC": teros_2_data[1],
-                # "terros_60_temp": teros_2_data[2],
-                # "terros_60_EC": teros_2_data[3],
-                "commercial_15": analog_data[1],
-                "commercial_30": analog_data[2],
-                "commercial_60": analog_data[3],
-            },
-        }
-    ]
-
-    # connect to influx
-    ifclient = InfluxDBClient(ifhost, ifport, ifuser, ifpass, ifdb)
-
-    # write the measurement
-    ifclient.write_points(body)
-
-
-schedule.every(60).minutes.do(read_soil)
-
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
+read_soil()
