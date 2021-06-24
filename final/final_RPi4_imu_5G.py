@@ -73,7 +73,7 @@ def handle_twin(twin):
 async def main():
 
     try:
-        conn_str = "HostName=GreenSpaces.azure-devices.net;DeviceId=GreenSpaceTree9;SharedAccessKey=2/xL/obaYf1/GwOhQ1a/J6O9nqyMzAhxQiZq2HvCYdM="
+        conn_str = ""
         device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
         await device_client.connect()
     except:
@@ -278,8 +278,8 @@ async def main():
     print("Successfully Uploaded Tree Dynamics Data to InfluxDB @ UDL")
 
     # influx configuration - edit these
-    ifuser = "ibrahim"
-    ifpass = "Dift1234"
+    ifuser = ""
+    ifpass = ""
     ifdb = "ground_sensors"
     ifhost = "localhost"
     ifport = 8086
