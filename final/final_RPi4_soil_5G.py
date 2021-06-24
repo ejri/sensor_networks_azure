@@ -2,7 +2,7 @@
 
 # Soil sensing device
 # Fair View Grove
-# Tree ID: 
+# Tree ID:
 # RPi 4 connected to Teros 12 sensors to measure soil temperature, volumetric soil water content,
 # dielectric constant at a range of frequencies, and soil electical conductivity
 
@@ -287,7 +287,7 @@ async def main():
 
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
-    
+
     with InfluxDBClient(url=_url, token=_token, org=_org) as _client:
 
         with _client.write_api(
@@ -333,9 +333,7 @@ async def main():
                     "time": time_utc,
                 },
             )
-    print("Successfully Uploaded Soil Data to InfluxDB @ UDL") 
-    
-        
+    print("Successfully Uploaded Soil Data to InfluxDB @ UDL")
 
     # influx configuration - edit these
     ifuser = ""
@@ -398,8 +396,8 @@ async def do_stuff_periodically(interval, periodic_function):
 if __name__ == "__main__":
     while True:
         try:
-            asyncio.run(do_stuff_periodically(600, main))
-
+            asyncio.run(do_stuff_periodically(21600, main))
+            # 21600 seconds == 6 hrs
             # run anomaly detection model. if anomaly, collect multiple smaples
             anomaly_detection = 0
             if anomaly_detection == 1:

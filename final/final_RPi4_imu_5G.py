@@ -358,8 +358,8 @@ async def do_stuff_periodically(interval, periodic_function):
 if __name__ == "__main__":
     while True:
         try:
-            asyncio.run(do_stuff_periodically(60, main))
-
+            asyncio.run(do_stuff_periodically(3600, main))
+            # 3600s = 1 hr
             # run anomaly detection model. if anomaly, collect multiple smaples
             anomaly_detection = 0
             if anomaly_detection == 1:
