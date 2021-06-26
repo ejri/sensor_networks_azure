@@ -70,6 +70,8 @@ def handle_twin(twin):
 
 
 async def main():
+    # check if there is a connection to Azure, otherwise skip Azure
+
     try:
         conn_str = ""
         device_client = IoTHubDeviceClient.create_from_connection_string(conn_str)
@@ -263,6 +265,8 @@ async def main():
     data["commercial_60"] = float(analog_data[3])
     json_body = json.dumps(data)
     print("Sending message: ", json_body)
+
+    # check if there is a connection to Azure, otherwise skip Azure
     try:
         await device_client.send_message(json_body)
 
@@ -288,6 +292,7 @@ async def main():
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
 
+    # check if there is a connection to influxDB, it will automatically check 5 times if it can get access, then skips
     with InfluxDBClient(url=_url, token=_token, org=_org) as _client:
 
         with _client.write_api(
@@ -333,6 +338,7 @@ async def main():
                     "time": time_utc,
                 },
             )
+
     print("Successfully Uploaded Soil Data to InfluxDB @ UDL")
 
     # influx configuration - edit these
