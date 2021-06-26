@@ -185,7 +185,7 @@ async def main():
     data["MPU_5_temp"] = temp5
     json_body = json.dumps(data)
     print("Sending message: ", json_body)
-    
+
     # check if there is a connection to Azure, otherwise skip Azure
     try:
         await device_client.send_message(json_body)
@@ -211,7 +211,6 @@ async def main():
 
     # take a timestamp for this measurement
     time_utc = datetime.datetime.utcnow()
-
 
     # check if there is a connection to influxDB, it will automatically check 5 times if it can get access, then skips
 
