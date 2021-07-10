@@ -291,8 +291,8 @@ def start_timing(time_to_stop):
                 # Azure
 
                 # influx configuration - edit these
-                ifuser = "ibrahim"
-                ifpass = "Dift1234"
+                ifuser = ""
+                ifpass = ""
                 ifdb = "ground_sensors"
                 ifhost = "localhost"
                 ifport = 8086
@@ -532,8 +532,8 @@ def start_timing(time_to_stop):
                 # Azure
 
                 # influx configuration - edit these
-                ifuser = "ibrahim"
-                ifpass = "Dift1234"
+                ifuser = ""
+                ifpass = ""
                 ifdb = "ground_sensors"
                 ifhost = "localhost"
                 ifport = 8086
