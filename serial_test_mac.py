@@ -45,7 +45,7 @@ def read_soil():
     #######on a raspberry pi
     # port_device = "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AC00Z2TL-if00-port0"
     #######on a mac
-    port_device = "/dev/tty.usbserial-AC00Z2TL"
+    port_device = "/dev/tty.usbserial-AC00Z2N8"
 
     ser = serial.Serial(
         port=port_device,
@@ -69,8 +69,8 @@ def read_soil():
     # print("\nSensor address:", sdi_12_address.decode("utf-8"))
 
     ################### defining each sensor to its own unique address. default is 0, so change the other connected ones.
-    # ser.write(sdi_12_address + b"A1!") # Data logger command.
-    # Request to the sensor to change its address from 1 to a new address of 0.
+    # ser.write(sdi_12_address + b"A2!") # Data logger command.
+    # # Request to the sensor to change its address from 1 to a new address of 0.
     # sdi_12_line = ser.readline()
     # sdi_12_line = sdi_12_line[:-2]  # remove \r and \n
     # teros_address_info_1="Sensor address converted to 1:"+str(sdi_12_line.decode('UTF-8'))
@@ -84,10 +84,10 @@ def read_soil():
     print(teros_address_info_2)
     # print("Sensor info:", sdi_12_line_2.decode("utf-8"))
 
-    ser.write(b"2M!")  # Data logger command. Request information from sensor 1.
+    ser.write(b"2M!")  # Data logger command. Request information from sensor 2.
     sdi_12_line_2 = ser.readline()
     sdi_12_line_2 = ser.readline()
-    ser.write(b"2D0!")  # Data logger command. Request all data from sensor 1.
+    ser.write(b"2D0!")  # Data logger command. Request all data from sensor 2.
     sdi_12_line_2 = ser.readline()
     sdi_12_line_2 = sdi_12_line_2[:-2]  # remove \r and \n
     teros_reading_2 = "Sensor " + str(sdi_12_line_2.decode("UTF-8"))
@@ -174,21 +174,21 @@ def read_soil():
     teros_0_data = [x for x in teros_reading_0.split("+")]
     teros_0_data[0] = teros_address_info_0
     print(teros_0_data)
-    # print("Sensor reading:", sdi_12_line_0.decode("utf-8"))
+    print("Sensor reading:", sdi_12_line_0.decode("utf-8"))
 
-    ### analog readings
+    ## analog readings
 
-    # ser.write(
-    #     b"?!"
-    # )  # Data logger command. Request for a response from any sensor listening on the data line.
+    ser.write(
+        b"?!"
+    )  # Data logger command. Request for a response from any sensor listening on the data line.
 
-    # ser.write(b"z!")
-    # ser.write(b"zI!")  # Data logger command. Request information from sensor 2.
-    # sdi_12_line_analog = ser.readline()
-    # sdi_12_line_analog = sdi_12_line_analog[:-2]  # remove \r and \n
-    # analog_firmware = str(sdi_12_line_analog.decode("UTF-8"))[17:]
-    # print(analog_firmware)
-    # # print("Sensor info:", sdi_12_line_analog.decode("utf-8"))
+    ser.write(b"z!")
+    ser.write(b"zI!")  # Data logger command. Request information from sensor 2.
+    sdi_12_line_analog = ser.readline()
+    sdi_12_line_analog = sdi_12_line_analog[:-2]  # remove \r and \n
+    analog_firmware = str(sdi_12_line_analog.decode("UTF-8"))[17:]
+    print(analog_firmware)
+    # print("Sensor info:", sdi_12_line_analog.decode("utf-8"))
 
     ser.write(b"zM!")  #
     # Data logger command. Request all data from analog sensors.
@@ -196,12 +196,14 @@ def read_soil():
     sdi_12_line_analog = ser.readline()
     ser.write(b"zD0!")
     sdi_12_line_analog = ser.readline()
+    sdi_12_line_analog = ser.readline()
+    sdi_12_line_analog = ser.readline()
     sdi_12_line_analog = sdi_12_line_analog[:-2]  # remove \r and \n
     analog_reading = "Analog Sensor: " + str(sdi_12_line_analog.decode("UTF-8"))
     print(analog_reading)
 
     analog_data = [x for x in analog_reading.split("+")]
-    analog_data[0] = "analog_reading"
+    analog_data[0] = 'analog_reading'
     print(analog_data)
 
     ser.close()
